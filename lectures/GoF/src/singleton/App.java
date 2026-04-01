@@ -1,7 +1,6 @@
 package singleton;
 
 import java.io.*;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public class App {
@@ -10,10 +9,12 @@ public class App {
         Settings settings = Settings.INSTANCE;
         Settings settings1 = null;
 
-        Constructor<?>[] declaredConstructors = Settings.class.getDeclaredConstructors();
-        for (Constructor<?> constructor : declaredConstructors) {
-            constructor.setAccessible(true);
-            settings1 = (Settings) constructor.newInstance("INSTANCE");
+        try (ObjectOutput out = new ObjectOutputStream(new FileOutputStream("settings.obj"))) {
+            out.writeObject(settings);
+        }
+
+        try (ObjectInput in = new ObjectInputStream(new FileInputStream("settings.obj"))) {
+            settings1 = (Settings) in.readObject();
         }
 
         System.out.println(settings == settings1);
