@@ -1,7 +1,7 @@
 package abstractfactory;
 
 
-interface ShipFactory {
+public interface ShipFactory {
 
     default Ship orderShip(String name, String email){
         validate(name, email);
