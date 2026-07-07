@@ -1,21 +1,26 @@
 package lesson2;
 
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.disposables.Disposable;
 
 public class Lesson2 {
 
     public static void main(String[] args) {
-        Observable<Integer> observable = Observable
-                .just(1, 2, 3);
+        onErrorTest();
+    }
 
+    private static void onErrorTest() {
+        Observable<Integer> onErrorTest = Observable.create(emitter -> {
+            emitter.onNext(1);
+            emitter.onNext(2);
 
-        Disposable disposable = observable.subscribe(
-                value -> {
-                    System.out.println("value = " + value);
-                }
+            emitter.onError(new RuntimeException());
+
+            emitter.onNext(3);
+        });
+
+        onErrorTest.subscribe(
+                System.out::println,
+                error -> System.out.println("error!")
         );
-
-        disposable.dispose();
     }
 }
